@@ -1,20 +1,28 @@
-from flask import Flask
-import pymysql
-from flask_cors import CORS
+from flask import Flask,render_template, request
+from flask_mysqldb import MySQL
 
 app = Flask(__name__)
-CORS(app)
 
-db = pymysql.connect(host="localhost", user="root", password="", database="ecosia")
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'ecosia'
+ 
+mysql = MySQL(app)
 
-@app.route("/")
+@app.route('/')
 def hello():
-  cursor = db.cursor()
+  return render_template('Index.html')
+
+@app.route('/alert')
+def alert():
+  cursor = mysql.connection.cursor()
   sql = "SELECT * FROM capteur"
   cursor.execute(sql)
   results = cursor.fetchall()
-  print(results[0])
-  return "az"
+  x = results[0][1]
+  print("Capteur" + x)
+  return "Capteur : " + str(x)
 
 if __name__ == "__main__":
   app.run(host="0.0.0.0", port=3000, debug=True)

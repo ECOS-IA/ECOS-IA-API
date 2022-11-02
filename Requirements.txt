@@ -1,3 +1,2 @@
 Flask
-pymysql
-flask_cors
+flask_mysqldb
