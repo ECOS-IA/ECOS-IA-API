@@ -1,4 +1,5 @@
 from flask import Flask,render_template, request
+import requests
 from flask_mysqldb import MySQL
 
 app = Flask(__name__)
@@ -10,19 +11,18 @@ app.config['MYSQL_DB'] = 'ecosia'
  
 mysql = MySQL(app)
 
-@app.route('/')
-def hello():
-  return render_template('Index.html')
 
-@app.route('/alert')
+
+@app.route('/')
 def alert():
   cursor = mysql.connection.cursor()
   sql = "SELECT * FROM capteur"
   cursor.execute(sql)
   results = cursor.fetchall()
   x = results[0][1]
-  print("Capteur" + x)
-  return "Capteur : " + str(x)
+  print("Capteur " + x)
+
+  #return requests.get("http://localhost:3000/api/", str(x)).content.decode("ascii")
 
 if __name__ == "__main__":
-  app.run(host="0.0.0.0", port=3000, debug=True)
+  app.run(host="0.0.0.0", port=4000, debug=True)
