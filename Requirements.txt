@@ -1,3 +1,7 @@
 Flask
 flask_mysqldb
+<<<<<<< Updated upstream
 json
+=======
+flask-cors
+>>>>>>> Stashed changes
