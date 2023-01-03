@@ -20,7 +20,7 @@ mysql = MySQL(app)
 @app.route('/')
 def alert():
   cursor = mysql.connection.cursor()
-  sql = "SELECT * FROM capteur"
+  sql = "SELECT * FROM raspberry"
   cursor.execute(sql)
   results = cursor.fetchall()
   x = results[0][1]
