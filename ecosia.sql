@@ -30,25 +30,26 @@ SET time_zone = "+00:00";
 CREATE TABLE `alert` (
   `id` int(11) NOT NULL,
   `time` datetime NOT NULL,
-  `id_capteur` int(11) NOT NULL
+  `id_raspberry` int(11) NOT NULL,
+  `label` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `capteur`
+-- Structure de la table `raspberry`
 --
 
-CREATE TABLE `capteur` (
+CREATE TABLE `raspberry` (
   `id` int(11) NOT NULL,
   `zone` char(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `capteur`
+-- Déchargement des données de la table `raspberry`
 --
 
-INSERT INTO `capteur` (`id`, `zone`) VALUES
+INSERT INTO `raspberry` (`id`, `zone`) VALUES
 (1, 'A'),
 (2, 'B'),
 (3, 'C');
@@ -62,12 +63,12 @@ INSERT INTO `capteur` (`id`, `zone`) VALUES
 --
 ALTER TABLE `alert`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `alert_capteur` (`id_capteur`);
+  ADD KEY `alert_raspberry` (`id_raspberry`);
 
 --
--- Index pour la table `capteur`
+-- Index pour la table `raspberry`
 --
-ALTER TABLE `capteur`
+ALTER TABLE `raspberry`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -81,9 +82,9 @@ ALTER TABLE `alert`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `capteur`
+-- AUTO_INCREMENT pour la table `raspberry`
 --
-ALTER TABLE `capteur`
+ALTER TABLE `raspberry`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
@@ -94,7 +95,7 @@ ALTER TABLE `capteur`
 -- Contraintes pour la table `alert`
 --
 ALTER TABLE `alert`
-  ADD CONSTRAINT `alert_capteur` FOREIGN KEY (`id_capteur`) REFERENCES `capteur` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `alert_raspberry` FOREIGN KEY (`id_raspberry`) REFERENCES `raspberry` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
