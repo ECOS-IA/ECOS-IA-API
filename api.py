@@ -49,7 +49,7 @@ def alert():
   cursor = mysql.connection.cursor()
   print(data)
   sql = f"INSERT INTO alert (time, id_raspberry, label) VALUES (%s, %s, %s)"
-  cursor.execute(sql, (data["timestamp"], data['id_raspberry'],data['label']) )
+  cursor.execute(sql, (datetime.strptime(data["timestamp"],'%d-%m-%Y %H:%M:%S'), data['id_raspberry'],data['label']) )
   mysql.connection.commit()
   cursor.close()
   return ""
