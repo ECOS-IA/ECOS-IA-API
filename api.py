@@ -4,6 +4,7 @@ from flask_mysqldb import MySQL
 from dotenv import load_dotenv
 import os
 import json
+from datetime import datetime
 
 load_dotenv()
 
@@ -17,21 +18,41 @@ app.config['MYSQL_DB'] = 'ecosia'
 mysql = MySQL(app)
 
 
-@app.route('/')
+@app.route('/alert/all')
 def get_all_alerts():
+  cursor = mysql.connection.cursor()
+  sql = "select id, DATE_FORMAT(time, '%Y-%m-%d %H:%i:%s') as time, id_raspberry, label from alert"
+  cursor.execute(sql)
+  results = cursor.fetchall()
+  #x = results[0][1]
+  #print("Raspberry " + x)
+
+  ### to parse date to str: date.strftime('%d-%m-%Y %H:%M:%S') ###
+  print(json.dumps(results))
+  return ""
+
+@app.route('/raspberry/all')
+def get_all_raspberrys():
   cursor = mysql.connection.cursor()
   sql = "SELECT * FROM raspberry"
   cursor.execute(sql)
   results = cursor.fetchall()
-  x = results[0][1]
-  print("Raspberry " + x)
+  #x = results[0][1]
+  #print("Raspberry " + x)
+  print(json.dumps(results))
+  return ""
+
 
 @app.route('/alert', methods=["POST"])
 def alert():
   data = json.loads(request.data)
   cursor = mysql.connection.cursor()
-  sql = f"INSERT INTO alert (time, id_raspberry, label) VALUES ({data['timestamp']},{data['id_raspberry']},{data['label']})"
-  cursor.execute(sql)
+  print(data)
+  sql = f"INSERT INTO alert (time, id_raspberry, label) VALUES (%s, %s, %s)"
+  cursor.execute(sql, (data["timestamp"], data['id_raspberry'],data['label']) )
+  mysql.connection.commit()
+  cursor.close()
+  return ""
 
 
   #return requests.get("http://localhost:3000/api/", str(x)).content.decode("ascii")
