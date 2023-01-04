@@ -1,4 +1,4 @@
-from flask import Flask,render_template, request
+from flask import Flask,jsonify, request
 import requests
 from flask_mysqldb import MySQL
 from dotenv import load_dotenv
@@ -27,9 +27,7 @@ def get_all_alerts():
   #x = results[0][1]
   #print("Raspberry " + x)
 
-  ### to parse date to str: date.strftime('%d-%m-%Y %H:%M:%S') ###
-  print(json.dumps(results))
-  return json.dumps(results)
+  return jsonify(results)
 
 @app.route('/raspberry/all')
 def get_all_raspberrys():
@@ -39,8 +37,9 @@ def get_all_raspberrys():
   results = cursor.fetchall()
   #x = results[0][1]
   #print("Raspberry " + x)
-  print(json.dumps(results))
-  return json.dumps(results)
+  
+  return jsonify(results)
+
 
 
 @app.route('/alert', methods=["POST"])
