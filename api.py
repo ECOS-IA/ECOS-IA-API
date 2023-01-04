@@ -22,11 +22,19 @@ mysql = MySQL(app)
 
 @app.route('/alert/all')
 def get_all_alerts():
+
+  if request.args.get('order'):
+    order_by = f"ORDER BY a.id {request.args['order'] if str.upper(request.args['order'])=='DESC' else 'ASC'}" 
+  else:
+    order_by=""
+  
   cursor = mysql.connection.cursor()
-  sql = """
+  sql = f"""
   SELECT a.id, DATE_FORMAT(a.time, '%Y-%m-%d %H:%i:%s') as time, a.id_raspberry, a.label, b.zone
   FROM alert a INNER JOIN raspberry b ON a.id_raspberry=b.id
+  {order_by}
   """
+  print(sql)
   cursor.execute(sql)
   results = cursor.fetchall()
   #x = results[0][1]
@@ -34,6 +42,7 @@ def get_all_alerts():
   cols = [desc[0] for desc in cursor.description]
   final_result = [dict(zip(cols,result)) for result in results]
   return jsonify(final_result)
+
 
 @app.route('/raspberry/all')
 def get_all_raspberrys():
