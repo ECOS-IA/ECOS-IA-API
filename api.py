@@ -26,7 +26,7 @@ def get_all_alerts():
   x = results[0][1]
   print("Raspberry " + x)
 
-@app.route('/predict', methods=["POST"])
+@app.route('/alert', methods=["POST"])
 def alert():
   data = json.loads(request.data)
   cursor = mysql.connection.cursor()
