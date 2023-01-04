@@ -34,7 +34,7 @@ def get_all_alerts():
   FROM alert a INNER JOIN raspberry b ON a.id_raspberry=b.id
   {order_by}
   """
-  print(sql)
+  
   cursor.execute(sql)
   results = cursor.fetchall()
   #x = results[0][1]
