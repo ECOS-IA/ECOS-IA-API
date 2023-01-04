@@ -29,7 +29,7 @@ def get_all_alerts():
 
   ### to parse date to str: date.strftime('%d-%m-%Y %H:%M:%S') ###
   print(json.dumps(results))
-  return ""
+  return json.dumps(results)
 
 @app.route('/raspberry/all')
 def get_all_raspberrys():
@@ -40,7 +40,7 @@ def get_all_raspberrys():
   #x = results[0][1]
   #print("Raspberry " + x)
   print(json.dumps(results))
-  return ""
+  return json.dumps(results)
 
 
 @app.route('/alert', methods=["POST"])
