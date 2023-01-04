@@ -5,10 +5,12 @@ from dotenv import load_dotenv
 import os
 import json
 from datetime import datetime
+from flask_cors import CORS
 
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = os.environ["MYSQL_USER"]
@@ -21,13 +23,17 @@ mysql = MySQL(app)
 @app.route('/alert/all')
 def get_all_alerts():
   cursor = mysql.connection.cursor()
-  sql = "select id, DATE_FORMAT(time, '%Y-%m-%d %H:%i:%s') as time, id_raspberry, label from alert"
+  sql = """
+  SELECT a.id, DATE_FORMAT(a.time, '%Y-%m-%d %H:%i:%s') as time, a.id_raspberry, a.label, b.zone
+  FROM alert a INNER JOIN raspberry b ON a.id_raspberry=b.id
+  """
   cursor.execute(sql)
   results = cursor.fetchall()
   #x = results[0][1]
   #print("Raspberry " + x)
-
-  return jsonify(results)
+  cols = [desc[0] for desc in cursor.description]
+  final_result = [dict(zip(cols,result)) for result in results]
+  return jsonify(final_result)
 
 @app.route('/raspberry/all')
 def get_all_raspberrys():
@@ -37,8 +43,9 @@ def get_all_raspberrys():
   results = cursor.fetchall()
   #x = results[0][1]
   #print("Raspberry " + x)
-  
-  return jsonify(results)
+  cols = [desc[0] for desc in cursor.description]
+  final_result = [dict(zip(cols,result)) for result in results]
+  return jsonify(final_result)
 
 
 
