@@ -3,6 +3,7 @@ import requests
 from flask_mysqldb import MySQL
 from dotenv import load_dotenv
 import os
+import json
 
 load_dotenv()
 
@@ -27,7 +28,10 @@ def get_all_alerts():
 
 @app.route('/predict', methods=["POST"])
 def alert():
-  print(request.data)
+  data = json.loads(request.data)
+  cursor = mysql.connection.cursor()
+  sql = f"INSERT INTO alert (time, id_raspberry, label) VALUES ({data['timestamp']},{data['id_raspberry']},{data['label']})"
+  cursor.execute(sql)
 
 
   #return requests.get("http://localhost:3000/api/", str(x)).content.decode("ascii")
